@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="en"><head>
+  <!--Added CDN for publishing-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/addons/p5.sound.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.0.0/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/freshfork/p5.EasyCam@1.0.10/p5.easycam.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8">
+  </head>
+  <body onload="onLoad();">
+    <img src="./assets/gear.png" onclick="on()" height="42" width="42" align="right">
+    
+    
+    <div id="overlay">
+      <div class="container-fluid">
+        <div class="row">
+        <div class="col" onclick="off()">
+           <!-- For Exit Click -->
+        </div>
+            <div class="col-6 text-center border rounded border-dark">
+              <h1>Phase Portrait Plotter</h1>
+              <p>This program supports graphing 2D and 3D phase portraits for systems of differential equations.<a href="google.com"> More infromation.</a></p>
+              <!-- Collapse Equations -->
+              
+              <div class="accordion" id="accordionExample">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" id ="button2D" onclick="setUp2D();">
+                        2D
+                      </button>
+                    </h2>
+                  </div>
+              
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <!--2D Equations-->
+                      <!--Equations X'(t)-->
+                      <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroup-sizing-sm" data-toggle="popover" title="x'(t) Differential Equation" 
+                          data-content="Enter f(t,x,y). Standard math functions can be used i.e. sqrt() and sin()">x'(t) = f(t,x,y) = </span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="xEq2D">
+                      </div>
+                      <!--Equations y'(t)-->
+                      <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroup-sizing-sm" data-toggle="popover" title="y'(t) Differential Equation" 
+                          data-content="Enter f(t,x,y). Standard math functions can be used i.e. sqrt() and sin()">y'(t) = f(t,x,y) = </span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="yEq2D">
+                      </div>
+                      <!--Equations-->
+                      <!--Initial Values-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="x initial Value" data-content="Put the value for x(tMin) here" >x<sub>0</sub></span>
+                        </div>
+                        <input type="number" aria-label="First name" class="form-control" id = "xInt2D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="y initial Value" data-content="Put the value for y(tMin) here.">y<sub>0</sub></span>
+                        </div>
+                        <input type="number" aria-label="Last name" class="form-control" id = "yInt2D">
+                      </div>
+                      <!--Initial Values-->
+                      <!--Time Range-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="Initial Time" data-content="Enter the first time value to be used" >t<sub>min</sub></span>
+                        </div>
+                        <input type="number" aria-label="First name" class="form-control" id = "tmin2D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="Final Time" data-content="Enter the last time value to be used">t<sub>max</sub></span>
+                        </div>
+                        <input type="number" aria-label="Last name" class="form-control" id = "tmax2D">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="Time Step" data-content="The Time Step used in the numerical solver (Runge-Kutta 4th).">t<sub>step</sub></span>
+                          </div>
+                          <input type="number" aria-label="Last name" class="form-control" id = "tstep2D">
+                      </div>
+                      <!--Time Range-->
+                      <!--Color of Line Graphed-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="Red Value" data-content="Red Value of an RGB value 0-255">r</span>
+                        </div>
+                        <input type="number" min = "0" max = "255" aria-label="First name" class="form-control" id = "rColor2D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="Green Value" data-content="Green Value of an RGB value 0-255">g</span>
+                        </div>
+                        <input type="number" min = "0" max = "255" aria-label="Last name" class="form-control" id = "gColor2D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="Blue Value" data-content="Blue Value of an RGB value 0-255" >b</span>
+                        </div>
+                        <input type="number" min = "0" max = "255" aria-label="Last name" class="form-control" id = "bColor2D">
+                      </div>
+                      <!--Color of Line Graphed-->
+                      <!--Zoom-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="Zoom Factor" data-content="Factor by which the graph is zoomed">zoom</span>
+                        </div>
+                        <input type="number" aria-label="First name" class="form-control" id = "zoom2D">
+                      </div>
+                      <!--Zoom-->
+                      <!--2D options-->
+                      Warning: Selecting both Randomix Color and Continous Grpahing can produce bright flashing colors.
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="true" id="randColor2D">
+                        <label class="form-check-label" for="defaultCheck1">
+                          Randomize Color
+                        </label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="true" id="continous2D">
+                        <label class="form-check-label" for="defaultCheck1">
+                          Continous Graphing
+                        </label>
+                      </div>
+                      <!--2D Options-->
+                      <!--2D Equations-->
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" id ="button3D" onclick="setUp3D();">
+                        3D
+                      </button>
+                    </h2>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <!--3D drop down-->
+                      <!--Equations X'(t)-->
+                      <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroup-sizing-sm" data-toggle="popover" title="x'(t) Differential Equation" 
+                          data-content="Enter f(t,x,y,z). Standard math functions can be used i.e. sqrt() and sin()">x'(t) = f(t,x,y,z) = </span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="xEq3D">
+                      </div>
+                      <!--Equations y'(t)-->
+                      <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroup-sizing-sm" data-toggle="popover" title="y'(t) Differential Equation" 
+                          data-content="Enter f(t,x,y,z). Standard math functions can be used i.e. sqrt() and sin()">y'(t) = f(t,x,y,z) = </span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="yEq3D">
+                      </div>
+                        <!--Equations z'(t)-->
+                        <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm" data-toggle="popover" title="z'(t) Differential Equation" 
+                            data-content="Enter f(t,x,y,z). Standard math functions can be used i.e. sqrt() and sin()">z'(t) = f(t,x,y,z) = </span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="zEq3D">
+                        </div>
+                      <!--Equations-->
+                      <!--Initial Values-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="x initial Value" data-content="Put the value for x(tMin) here" >x<sub>0</sub></span>
+                        </div>
+                        <input type="number" aria-label="First name" class="form-control" id="xInt3D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="y initial Value" data-content="Put the value for y(tMin) here">y<sub>0</sub></span>
+                        </div>
+                        <input type="number" aria-label="Last name" class="form-control" id = "yInt3D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="z initial Value" data-content="Put the value for z(tMin) here">z<sub>0</sub></span>
+                        </div>
+                        <input type="number" aria-label="Last name" class="form-control" id = "zInt3D">
+                      </div>
+                      <!--Initial Values-->
+                      <!--Time Range-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="Initial Time" data-content="Enter the first time value to be used" >t<sub>min</sub></span>
+                        </div>
+                        <input type="number" aria-label="First name" class="form-control" id = "tmin3D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="Final Time" data-content="Enter the last time value to be used">t<sub>max</sub></span>
+                        </div>
+                        <input type="number" aria-label="Last name" class="form-control" id = "tmax3D">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="Time Step" data-content="The Time Step used in the numerical solver (Runge-Kutta 4th).">t<sub>step</sub></span>
+                          </div>
+                          <input type="number" aria-label="Last name" class="form-control" id = "tstep3D">
+                      </div>
+                      <!--Time Range-->
+                      <!--Color of Line Graphed-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="Red Value" data-content="Red Value of an RGB value 0-255">r</span>
+                        </div>
+                        <input type="number" min = "0" max = "255" aria-label="First name" class="form-control" id = "rColor3D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="Green Value" data-content="Green Value of an RGB value 0-255">g</span>
+                        </div>
+                        <input type="number" min = "0" max = "255" aria-label="Last name" class="form-control" id = "gColor3D">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" data-toggle="popover" title="Blue Value" data-content="Blue Value of an RGB value 0-255">b</span>
+                        </div>
+                        <input type="number" min = "0" max = "255" aria-label="Last name" class="form-control" id = "bColor3D">
+                      </div>
+                      <!--Color of Line Graphed-->
+                      <!--Zoom-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" data-toggle="popover" title="Zoom Factor" data-content="Factor by which the graph is zoomed">zoom</span>
+                        </div>
+                        <input type="number" aria-label="First name" class="form-control" id = "zoom3D">
+                      </div>
+                      <!--Zoom-->
+                      <!--3D options-->
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text" data-toggle="popover" title="Limit Points" data-content="If checked the program will limit the number of points graphed to the value entered into the box. This can help with performance. ">
+                            <input type="checkbox" aria-label="Checkbox for following text input" id ="limitPoints3D">
+                            &nbsp;Limit Points
+                          </div>
+                        </div>
+                        <input type="number" class="form-control" aria-label="Text input with checkbox" id = "pointNum3D">
+                      </div>
+
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text" data-toggle="popover" title="Box Points" data-content="If checked the program will graph boxes instead of lines. Box size is determined by input.">
+                            <input type="checkbox" aria-label="Checkbox for following text input" id="boxPoints3D">
+                            &nbsp;Box Points
+                          </div>
+                        </div>
+                        <input type="number" class="form-control" aria-label="Text input with checkbox" id ="boxSize3D">
+                      </div>
+                      <!--3D options-->
+                      <!--3D drop down-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+              <!-- Collapse Equations -->
+              <!--Graphing Buttons / Close Button-->
+              <div class="row mt-2">
+                <div class="col text-center">
+              <button type="button" class="btn btn-primary btn-lg" onclick = "graphB();">Graph</button>
+              <button type="button" class="btn btn-primary btn-lg" onclick = "clearB();">Clear</button>
+              <button type="button" class="btn btn-primary btn-lg" onclick = "saveImage();">Save</button>
+              <button type="button" class="btn btn-primary btn-lg" onclick="off();">Close</button>
+              </div>
+            </div>
+              <!--Graphing Buttons / Close Button-->
+              
+            </div>
+        <div class="col" onclick="off()">
+          <!-- For Exit Click -->
+        </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  <!-- General Javascript -->
+  <script src="sketchO.js?30"></script>
+  <script src="index.js?30"></script>
+  <script src="solver.js?30"></script>
+  <!--Got up to 30 starting over new version-->
+  <!-- Bootstrap Javascript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  
+
+</body></html>
