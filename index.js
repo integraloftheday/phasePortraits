@@ -9,6 +9,7 @@ var ContG =false;
 //function Onload
 function onLoad(){
   popoverLoad();
+  off();
   Graph2D = new vars2D(); 
   Graph2D.setValues();
   Graph3D = new vars3D(); 
