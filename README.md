@@ -1,5 +1,5 @@
 # phasePortraits
-A website that can graph 2D and 3D phase portaits of differential equations.
+A website that can graph 2D and 3D phase portaits of differential equations. 
 The website can be found here: [integraloftheday.github.io/phasePortraits/](https://integraloftheday.github.io/phasePortraits/)
 
 ## Dependencies 
